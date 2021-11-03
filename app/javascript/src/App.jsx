@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
-import { setAuthHeaders } from "apis/axios";
+import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import { initializeLogger } from "common/logger";
 import Login from "components/Login";
 
@@ -13,6 +14,7 @@ const App = () => {
   useEffect(() => {
     initializeLogger();
     setAuthHeaders(setLoading);
+    registerIntercepts();
   }, []);
 
   if (loading) {
@@ -21,6 +23,7 @@ const App = () => {
 
   return (
     <Router>
+      <ToastContainer />
       <Switch>
         <Route exact path="/" render={() => <div>Home</div>} />
         <Route exact path="/about" render={() => <div>About</div>} />
