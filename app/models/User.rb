@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   enum role: { standard: 0, administrator: 1 }
   has_secure_password
+  has_secure_token :authentication_token
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: VALID_EMAIL_REGEX }
   validates :last_name, presence: true, length: { maximum: Constants::MAX_USER_NAME_LENGTH }
