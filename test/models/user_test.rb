@@ -7,7 +7,9 @@ class UserTest < ActiveSupport::TestCase
     @user = User.new(
       email: "oliver@example.com",
       first_name: "oliver",
-      last_name: "twist"
+      last_name: "twist",
+      password: "charles",
+      password_confirmation: "charles"
                 )
   end
 
@@ -88,5 +90,23 @@ fishy+#.com]
       @user.role = role
       assert @user.valid?
     end
+  end
+
+  def test_password_cant_be_blank
+    @user.password = nil
+    assert_not @user.valid?
+    assert_includes @user.errors.full_messages, "Password can't be blank"
+  end
+
+  def test_password_should_have_minimum_length
+    @user.password = "aaaaa"
+    assert_not @user.valid?
+    assert_includes @user.errors.full_messages, "Password confirmation doesn't match Password"
+  end
+
+  def test_password_should_match_password_confirmation
+    @user.password_confirmation = @user.password + "_random"
+    assert_not @user.valid?
+    assert_includes @user.errors.full_messages, "Password confirmation doesn't match Password"
   end
 end
