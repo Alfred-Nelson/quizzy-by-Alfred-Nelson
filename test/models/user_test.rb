@@ -81,4 +81,12 @@ fishy+#.com]
       assert @user.valid?
     end
   end
+
+  def test_user_should_have_valid_role
+    all_roles = %w[administrator standard]
+    all_roles.each do |role|
+      @user.role = role
+      assert @user.valid?
+    end
+  end
 end
