@@ -10,6 +10,7 @@ import PrivateRoute from "components/Common/PrivateRoute";
 import Container from "components/Container";
 import Dashboard from "components/Dashboard";
 import Login from "components/Login";
+import Create from "components/Quiz/Create";
 import { getFromLocalStorage } from "helpers/storage";
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
         <Switch>
           <Route exact path="/about" render={() => <div>About</div>} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/quiz/create" component={Create} />
           <PrivateRoute
             path="/"
             redirectRoute="/login"
