@@ -8,6 +8,7 @@ import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import { initializeLogger } from "common/logger";
 import PrivateRoute from "components/Common/PrivateRoute";
 import Container from "components/Container";
+import Dashboard from "components/Dashboard";
 import Login from "components/Login";
 import { getFromLocalStorage } from "helpers/storage";
 
@@ -37,7 +38,7 @@ const App = () => {
             path="/"
             redirectRoute="/login"
             condition={isLoggedIn}
-            component={() => <>hello</>}
+            component={Dashboard}
           />
         </Switch>
       </Container>
