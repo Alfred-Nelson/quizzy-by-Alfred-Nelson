@@ -13,7 +13,8 @@ const Login = () => {
 
   loading;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async e => {
+    e.preventDefault();
     try {
       setLoading(true);
       const response = await AuthApi.create({ login: { email, password } });
@@ -21,7 +22,8 @@ const Login = () => {
         authToken: response.data.authentication_token,
         email,
         userId: response.data.id,
-        userName: response.data.name,
+        userFirstName: response.data.first_name,
+        userLastName: response.data.last_name,
       });
       setAuthHeaders();
       setLoading(false);

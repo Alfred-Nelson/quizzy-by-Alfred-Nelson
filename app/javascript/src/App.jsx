@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 
+import { either, isEmpty, isNil } from "ramda";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import { initializeLogger } from "common/logger";
+import PrivateRoute from "components/Common/PrivateRoute";
+import Container from "components/Container";
 import Login from "components/Login";
+import { getFromLocalStorage } from "helpers/storage";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
-  // previous code if any
+  const authToken = getFromLocalStorage("authToken");
+  const isLoggedIn = !either(isNil, isEmpty)(authToken) && authToken !== "null";
 
   useEffect(() => {
     initializeLogger();
@@ -24,11 +29,18 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Switch>
-        <Route exact path="/" render={() => <div>Home</div>} />
-        <Route exact path="/about" render={() => <div>About</div>} />
-        <Route exact path="/login" component={Login} />
-      </Switch>
+      <Container isLoggedIn={isLoggedIn}>
+        <Switch>
+          <Route exact path="/about" render={() => <div>About</div>} />
+          <Route exact path="/login" component={Login} />
+          <PrivateRoute
+            path="/"
+            redirectRoute="/login"
+            condition={isLoggedIn}
+            component={() => <>hello</>}
+          />
+        </Switch>
+      </Container>
     </Router>
   );
 };
