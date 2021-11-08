@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from "react";
 
 import { Edit, Delete } from "@bigbinary/neeto-icons";
-import { Button, Typography } from "@bigbinary/neetoui/v2";
+import { Button, Typography, Alert } from "@bigbinary/neetoui/v2";
 import { useTable } from "react-table";
 
+import { QuizApi } from "apis/quiz";
 import ModalCreate from "Common/ModalCreate";
 import TableModalBody from "Common/utils/Table/TableModalBody";
 import TableModalFooter from "Common/utils/Table/TableModalFooter";
@@ -14,6 +15,8 @@ const Table = ({ allQuizzes, fetchDetails }) => {
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [deleteUser, setDeleteUser] = useState(null);
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
   const columns = useMemo(() => COLUMN, []);
   const data = useMemo(() => allQuizzes, [allQuizzes]);
 
@@ -70,7 +73,13 @@ const Table = ({ allQuizzes, fetchDetails }) => {
                           setShowModal(true);
                         }}
                       />
-                      <Button icon={Delete} />
+                      <Button
+                        icon={Delete}
+                        onClick={() => {
+                          setAlertIsOpen(true);
+                          setDeleteUser(row.original.id);
+                        }}
+                      />
                     </div>
                   </td>
                 ))}
@@ -98,6 +107,21 @@ const Table = ({ allQuizzes, fetchDetails }) => {
             fetchDetails={fetchDetails}
           />
         }
+      />
+      <Alert
+        closeButton
+        isOpen={alertIsOpen}
+        message="Are you sure you want to continue? All of your unsaved changes will be lost."
+        onClose={() => {
+          setAlertIsOpen(false);
+          setDeleteUser(null);
+        }}
+        onSubmit={async () => {
+          await QuizApi.kill(deleteUser);
+          setAlertIsOpen(false);
+          fetchDetails();
+        }}
+        title="You have unsaved changes!"
       />
     </div>
   );
