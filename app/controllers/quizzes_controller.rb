@@ -19,6 +19,18 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def update
+    @quizzes = Quiz.find_by(id: params[:id])
+    puts @quizzes
+    puts params[:id]
+    authorize @quizzes
+    if @quizzes.update(quiz_params)
+      render status: :ok, json: { notice: t("quiz.update_success") }
+    else
+      render status: :unprocessable_entity, json: { error: @quizzes.errors.full_messages }
+    end
+  end
+
   private
 
     def quiz_params

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class QuizPolicy
-  attr_reader :user, :task
+  attr_reader :user, :quiz
 
   def initialize(user, quiz)
     @user = user
     @quiz = quiz
   end
 
-  def edit?
+  def update?
     quiz.user_id == user.id
   end
 

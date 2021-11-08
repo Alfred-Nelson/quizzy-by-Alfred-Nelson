@@ -5,7 +5,8 @@ module.exports = {
       common: "src/common",
       components: "src/components",
       constants: "src/constants",
-      helpers: "src/helpers"
+      helpers: "src/helpers",
+      Common: "src/components/Common"
     }
   }
 };

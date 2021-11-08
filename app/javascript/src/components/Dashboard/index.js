@@ -4,6 +4,8 @@ import { Plus } from "@bigbinary/neeto-icons";
 import { Button, Typography } from "@bigbinary/neetoui/v2";
 import { Link } from "react-router-dom";
 
+import Table from "./Table";
+
 import { QuizApi } from "../../apis/quiz";
 
 const Dashboard = () => {
@@ -31,10 +33,12 @@ const Dashboard = () => {
           />
         </Link>
       </div>
-      {allQuizzes.length <= 0 && (
+      {allQuizzes.length <= 0 ? (
         <div className="flex h-64 md:mt-20 w-full justify-center items-center">
           <Typography style="body1">👾 No quizzes</Typography>
         </div>
+      ) : (
+        <Table allQuizzes={allQuizzes} fetchDetails={fetchDetails} />
       )}
     </div>
   );
