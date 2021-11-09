@@ -9,6 +9,7 @@ import { setToLocalStorage, getFromLocalStorage } from "helpers/storage";
 const NavItems = () => {
   const userFirstName = getFromLocalStorage("authUserFirstName");
   const userLastName = getFromLocalStorage("authUserLastName");
+  const userName = `${userFirstName} ${userLastName}`;
 
   const handleClick = async () => {
     try {
@@ -30,10 +31,7 @@ const NavItems = () => {
   return (
     <div className="flex flex-col md:flex-row">
       <Typography className="mr-5"> Reports </Typography>
-      <Typography className="mr-5">
-        {" "}
-        {userFirstName} {userLastName}{" "}
-      </Typography>
+      <Typography className="mr-5">{userName}</Typography>
       <Button label="Logout" onClick={handleClick} className="mr-5" />
     </div>
   );
