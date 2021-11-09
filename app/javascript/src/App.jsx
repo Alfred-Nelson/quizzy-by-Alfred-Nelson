@@ -33,7 +33,6 @@ const App = () => {
       <ToastContainer />
       <Container isLoggedIn={isLoggedIn}>
         <Switch>
-          <Route exact path="/about" render={() => <div>About</div>} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/quiz/create" component={Create} />
           <PrivateRoute

@@ -1,40 +1,35 @@
 # frozen_string_literal: true
 
 class QuizzesController < ApplicationController
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
   before_action :authenticate_user_using_x_auth_token
   before_action :load_quizzes, only: %i[destroy update]
 
   def index
-    @quiz = policy_scope(Quiz)
+    @quizzes = @current_user.quizzes.order("updated_at DESC")
   end
 
   def create
-    @quizzes = Quiz.new(quiz_params.merge(user_id: @current_user.id))
-    authorize @quizzes
-    if @quizzes.save
+    @quiz = @current_user.quizzes.new(quiz_params)
+    if @quiz.save
       render status: :ok, json: { notice: t("quiz.create_success") }
     else
-      render status: :unprocessable_entity, json: { error: @quizzes.errors.full_messages }
+      render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
   end
 
   def update
-    authorize @quizzes
-    if @quizzes.update(quiz_params)
+    if @quiz.update(quiz_params)
       render status: :ok, json: { notice: t("quiz.update_success") }
     else
-      render status: :unprocessable_entity, json: { error: @quizzes.errors.full_messages }
+      render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
   end
 
   def destroy
-    authorize @quizzes
-    if @quizzes.destroy
+    if @quiz.destroy
       render status: :ok, json: { notice: t("quiz.destroy_success") }
     else
-      render status: :unprocessable_entity, json: { notice: @quizzes.errors.full_messages }
+      render status: :unprocessable_entity, json: { notice: @quiz.errors.full_messages }
     end
   end
 
@@ -45,6 +40,6 @@ class QuizzesController < ApplicationController
     end
 
     def load_quizzes
-      @quizzes = Quiz.find_by(id: params[:id])
+      @quiz = @current_user.quizzes.find_by(id: params[:id])
     end
 end

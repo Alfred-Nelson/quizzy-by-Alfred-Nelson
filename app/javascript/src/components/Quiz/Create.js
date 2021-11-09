@@ -6,11 +6,11 @@ import { useHistory } from "react-router";
 import { QuizApi } from "apis/quiz";
 
 const Create = () => {
-  const [input, setInput] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const history = useHistory();
 
   const handleSubmit = async () => {
-    await QuizApi.create({ quiz: { name: input } });
+    await QuizApi.create({ quiz: { name: inputValue } });
     history.push("/");
   };
 
@@ -20,9 +20,9 @@ const Create = () => {
       <Input
         placeholder="Enter quiz name"
         className=" w-64 mt-5 "
-        value={input}
+        value={inputValue}
         label="Name"
-        onChange={e => setInput(e.target.value)}
+        onChange={e => setInputValue(e.target.value)}
       />
       <Button label="Submit" className="mt-5" onClick={handleSubmit} />
     </div>
