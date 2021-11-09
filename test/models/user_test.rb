@@ -100,8 +100,16 @@ fishy+#.com]
 
   def test_password_should_have_minimum_length
     @user.password = "aaaaa"
+    @user.password_confirmation = "aaaaa"
     assert_not @user.valid?
-    assert_includes @user.errors.full_messages, "Password confirmation doesn't match Password"
+    assert_includes @user.errors.full_messages, "Password is too short (minimum is 6 characters)"
+  end
+
+  def test_password_confirmation_should_have_minimum_length
+    @user.password_confirmation = "aaaaa"
+    @user.password = "aaaaa"
+    assert_not @user.valid?
+    assert_includes @user.errors.full_messages, "Password confirmation is too short (minimum is 6 characters)"
   end
 
   def test_password_should_match_password_confirmation

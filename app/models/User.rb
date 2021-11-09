@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true, length: { maximum: Constants::MAX_USER_NAME_LENGTH }
   validates :first_name, presence: true, length: { maximum: Constants::MAX_USER_NAME_LENGTH }
   validates :password, length: { minimum: 6 }, if: -> { password.present? }
-  validates :password_confirmation, presence: true, on: :create
+  validates :password_confirmation, length: { minimum: 6 }, presence: true, on: :create
 
   before_save :to_lower_case
 
