@@ -7,34 +7,34 @@ class QuizzesController < ApplicationController
   before_action :load_quizzes, only: %i[destroy update]
 
   def index
-    @quiz = policy_scope(Quiz)
+    @quizzes = policy_scope(Quiz).order("updated_at DESC")
   end
 
   def create
-    @quizzes = Quiz.new(quiz_params.merge(user_id: @current_user.id))
-    authorize @quizzes
-    if @quizzes.save
+    @quiz = Quiz.new(quiz_params.merge(user_id: @current_user.id))
+    authorize @quiz
+    if @quiz.save
       render status: :ok, json: { notice: t("quiz.create_success") }
     else
-      render status: :unprocessable_entity, json: { error: @quizzes.errors.full_messages }
+      render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
   end
 
   def update
-    authorize @quizzes
-    if @quizzes.update(quiz_params)
+    authorize @quiz
+    if @quiz.update(quiz_params)
       render status: :ok, json: { notice: t("quiz.update_success") }
     else
-      render status: :unprocessable_entity, json: { error: @quizzes.errors.full_messages }
+      render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
   end
 
   def destroy
-    authorize @quizzes
-    if @quizzes.destroy
+    authorize @quiz
+    if @quiz.destroy
       render status: :ok, json: { notice: t("quiz.destroy_success") }
     else
-      render status: :unprocessable_entity, json: { notice: @quizzes.errors.full_messages }
+      render status: :unprocessable_entity, json: { notice: @quiz.errors.full_messages }
     end
   end
 
@@ -45,6 +45,6 @@ class QuizzesController < ApplicationController
     end
 
     def load_quizzes
-      @quizzes = Quiz.find_by(id: params[:id])
+      @quiz = Quiz.find_by(id: params[:id])
     end
 end
