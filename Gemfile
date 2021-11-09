@@ -54,6 +54,3 @@ gem "bcrypt", "~> 3.1.13"
 
 # for react
 gem "react-rails"
-
-# authorization
-gem "pundit"
