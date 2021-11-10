@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import { Edit, Delete } from "@bigbinary/neeto-icons";
 import { Button, Typography, Alert } from "@bigbinary/neetoui/v2";
+import { useHistory } from "react-router";
 import { useTable } from "react-table";
 
 import { QuizApi } from "apis/quiz";
@@ -17,6 +18,7 @@ const Table = ({ allQuizzes, fetchDetails }) => {
   const [editValue, setEditValue] = useState("");
   const [deleteUser, setDeleteUser] = useState(null);
   const [alertIsOpen, setAlertIsOpen] = useState(false);
+  const history = useHistory();
   const columns = useMemo(() => COLUMN, []);
   const data = useMemo(() => allQuizzes, [allQuizzes]);
 
@@ -59,7 +61,12 @@ const Table = ({ allQuizzes, fetchDetails }) => {
                     className="flex flex-col items-center sm:flex-row sm:justify-between"
                     {...cell.getCellProps()}
                   >
-                    <div>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() =>
+                        history.push(`/quiz/${row.original.id}/show`)
+                      }
+                    >
                       <Typography>{cell.render("Cell")}</Typography>
                     </div>
                     <div>

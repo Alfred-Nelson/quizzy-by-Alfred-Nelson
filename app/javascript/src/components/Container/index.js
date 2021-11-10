@@ -12,7 +12,7 @@ const Container = ({ children, isLoggedIn }) => {
         actionBlock={isLoggedIn ? <NavItems /> : null}
         className="border-b-2"
       />
-      {children}
+      <div className="mx-20 my-10 ">{children}</div>
     </div>
   );
 };
