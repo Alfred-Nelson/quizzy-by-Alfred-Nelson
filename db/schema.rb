@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_10_173117) do
+ActiveRecord::Schema.define(version: 2021_11_10_175312) do
 
   create_table "options", force: :cascade do |t|
     t.text "value", null: false
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2021_11_10_173117) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "options", "questions", column: "questions_id"
-  add_foreign_key "questions", "quizzes"
+  add_foreign_key "options", "questions", column: "questions_id", on_delete: :cascade
+  add_foreign_key "questions", "quizzes", on_delete: :cascade
   add_foreign_key "quizzes", "users"
 end
