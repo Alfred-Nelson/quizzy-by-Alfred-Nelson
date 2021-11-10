@@ -34,7 +34,7 @@ const Quiz = ({
             <div className="w-3/4 flex justify-between">
               <div className="w-11/12">
                 <Input
-                  value={optionsObject[index]}
+                  value={optionsObject[index] ? optionsObject[index] : ""}
                   onChange={e => handleChange(e, index)}
                 />
               </div>
