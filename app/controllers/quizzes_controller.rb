@@ -2,7 +2,7 @@
 
 class QuizzesController < ApplicationController
   before_action :authenticate_user_using_x_auth_token
-  before_action :load_quizzes, only: %i[destroy update]
+  before_action :load_quizzes, only: %i[destroy update show]
 
   def index
     @quizzes = @current_user.quizzes.order("updated_at DESC")
@@ -22,6 +22,12 @@ class QuizzesController < ApplicationController
       render status: :ok, json: { notice: t("quiz.update_success") }
     else
       render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
+    end
+  end
+
+  def show
+    unless @quiz
+      render status: :not_found, json: { error: @quiz.errors.full_messages }
     end
   end
 

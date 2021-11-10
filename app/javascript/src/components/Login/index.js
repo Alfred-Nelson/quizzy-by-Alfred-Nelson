@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-screen h-screen justify-center">
+    <div className="flex flex-col items-center mt-20 justify-center">
       <form className="flex flex-col items-center w-screen mb-40">
         <Typography style="h1" className="mb-10">
           Sign In
