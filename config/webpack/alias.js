@@ -6,7 +6,8 @@ module.exports = {
       components: "src/components",
       constants: "src/constants",
       helpers: "src/helpers",
-      Common: "src/components/Common"
+      Common: "src/components/Common",
+      Form: "src/components/Form"
     }
   }
 };
