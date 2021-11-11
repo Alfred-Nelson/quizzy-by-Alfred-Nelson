@@ -22,7 +22,11 @@ const Show = () => {
 
   return (
     <>
-      <PageHeader heading={`${quizName} Quiz`} buttonValue="Add questions" />
+      <PageHeader
+        heading={`${quizName} Quiz`}
+        buttonValue="Add questions"
+        linkTo={`/quiz/${id}/add/question`}
+      />
     </>
   );
 };

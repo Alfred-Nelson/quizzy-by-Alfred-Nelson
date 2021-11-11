@@ -11,7 +11,7 @@ class QuizzesController < ApplicationController
   def create
     @quiz = @current_user.quizzes.new(quiz_params)
     if @quiz.save
-      render status: :ok, json: { notice: t("quiz.create_success") }
+      render status: :ok, json: { notice: t("create_success", entity: "Quiz") }
     else
       render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
