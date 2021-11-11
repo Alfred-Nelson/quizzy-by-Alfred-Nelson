@@ -11,6 +11,8 @@ import {
 
 const Quiz = ({
   array,
+  textareaValue,
+  setTextareaValue,
   optionsObject,
   numberOfOptions,
   setNumberOfOptions,
@@ -18,6 +20,7 @@ const Quiz = ({
   handleChange,
   correctAnswer,
   setCorrectAnswer,
+  handleSubmit,
 }) => {
   return (
     <div className="w-full">
@@ -26,6 +29,8 @@ const Quiz = ({
         placeholder="Enter the Question"
         rows={3}
         className="mt-10"
+        value={textareaValue}
+        onChange={e => setTextareaValue(e.target.value)}
       />
       <div className="w-full flex flex-col items-center">
         {array.map((_, index) => (
@@ -74,7 +79,10 @@ const Quiz = ({
           }))}
         />
 
-        <button className="mt-10 rounded p-2 bg-gradient-to-b from-yellow-300 to-yellow-500 hover:bg-gradient-to-b hover:from-yellow-200 hover:via-yellow-300 hover:to-yellow-500">
+        <button
+          className="mt-10 rounded p-2 bg-gradient-to-b from-yellow-300 to-yellow-500 hover:bg-gradient-to-b hover:from-yellow-200 hover:via-yellow-300 hover:to-yellow-500"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>

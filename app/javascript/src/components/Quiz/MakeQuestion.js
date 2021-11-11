@@ -1,17 +1,24 @@
+import { TOASTR_OPTIONS } from "constants";
+
 import React, { useState, useEffect } from "react";
 
 import { useParams } from "react-router";
+import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 
+import { QuestionApi } from "apis/question";
 import { QuizApi } from "apis/quiz";
 import PageHeader from "Common/utils/PageHeader";
 import Quiz from "Form/Quiz";
 
 const MakeQuestion = () => {
   const [quizName, setQuizName] = useState("");
-  const [optionsObject, setOptionsObject] = useState([]);
+  const [textareaValue, setTextareaValue] = useState("");
+  const [optionsObject, setOptionsObject] = useState(["", ""]);
   const [numberOfOptions, setNumberOfOptions] = useState(2);
   const [correctAnswer, setCorrectAnswer] = useState(null);
   const { id } = useParams();
+  const history = useHistory();
 
   const fetchQuizDetails = async () => {
     const response = await QuizApi.show(id);
@@ -41,6 +48,33 @@ const MakeQuestion = () => {
     }
   };
 
+  const callCreateApi = async result => {
+    await QuestionApi.create({
+      question: {
+        value: textareaValue,
+        quiz_id: id,
+        options_attributes: result,
+      },
+    });
+    history.push(`/quiz/${id}/show`);
+  };
+
+  const handleSubmit = () => {
+    if (
+      optionsObject.length !== numberOfOptions ||
+      optionsObject.includes("")
+    ) {
+      toast.error("Options cannot be blank", TOASTR_OPTIONS);
+    } else if (!correctAnswer) {
+      toast.error("Select a Correct answer", TOASTR_OPTIONS);
+    } else {
+      const result = optionsObject.map((val, index) => {
+        return { value: val, answer: correctAnswer.value == index };
+      });
+      callCreateApi(result);
+    }
+  };
+
   useEffect(() => {
     fetchQuizDetails();
   }, []);
@@ -53,6 +87,8 @@ const MakeQuestion = () => {
       />
       <Quiz
         array={Array(numberOfOptions).fill()}
+        textareaValue={textareaValue}
+        setTextareaValue={setTextareaValue}
         optionsObject={optionsObject}
         numberOfOptions={numberOfOptions}
         setNumberOfOptions={setNumberOfOptions}
@@ -60,6 +96,7 @@ const MakeQuestion = () => {
         handleRemove={handleRemove}
         correctAnswer={correctAnswer}
         setCorrectAnswer={setCorrectAnswer}
+        handleSubmit={handleSubmit}
       />
     </div>
   );
