@@ -19,7 +19,7 @@ class QuizzesController < ApplicationController
 
   def update
     if @quiz.update(quiz_params)
-      render status: :ok, json: { notice: t("quiz.update_success") }
+      render status: :ok, json: { notice: t("update_success", entity: "Quiz name") }
     else
       render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
@@ -33,7 +33,7 @@ class QuizzesController < ApplicationController
 
   def destroy
     if @quiz.destroy
-      render status: :ok, json: { notice: t("quiz.destroy_success") }
+      render status: :ok, json: { notice: t("destroy_success", entity: "Quiz") }
     else
       render status: :unprocessable_entity, json: { notice: @quiz.errors.full_messages }
     end

@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { CheckCircle, Edit, Delete } from "@bigbinary/neeto-icons";
-import { Typography, Button } from "@bigbinary/neetoui/v2";
+import { Typography, Button, Alert } from "@bigbinary/neetoui/v2";
+import { useHistory } from "react-router";
 
-const ShowQuestions = ({ questionsArray }) => {
+import { QuestionApi } from "apis/question";
+
+const ShowAll = ({ questionsArray, fetchQuizDetails }) => {
+  const [editButtonId, setEditButtonId] = useState(null);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [deleteQuestion, setDeleteQuestion] = useState(false);
   const color = "text-green-500";
+  const history = useHistory();
+
+  useEffect(() => {
+    if (editButtonId) {
+      history.push(`/question/${editButtonId}/edit`);
+    }
+  }, [editButtonId]);
 
   return (
     <div className="w-full flex justify-center">
@@ -16,7 +29,7 @@ const ShowQuestions = ({ questionsArray }) => {
           <div key={index} className="my-8">
             <div className="flex justify-between">
               <div className="flex">
-                <Typography style="body1" className="text-gray-600 w-32">
+                <Typography style="body1" className="text-gray-800 w-32">
                   Question {index + 1} :
                 </Typography>
                 <Typography
@@ -27,8 +40,20 @@ const ShowQuestions = ({ questionsArray }) => {
                 </Typography>
               </div>
               <div>
-                <Button icon={Edit} className="mr-5" style="secondary" />
-                <Button icon={Delete} />
+                <Button
+                  icon={Edit}
+                  className="mr-5"
+                  style="secondary"
+                  onClick={() => setEditButtonId(question.id)}
+                />
+                {/* // history.push(`/question/${e.target.id}/edit`) */}
+                <Button
+                  icon={Delete}
+                  onClick={() => {
+                    setAlertOpen(true);
+                    setDeleteQuestion(question.id);
+                  }}
+                />
               </div>
             </div>
             <div className="mt-2">
@@ -52,8 +77,24 @@ const ShowQuestions = ({ questionsArray }) => {
           </div>
         ))}
       </div>
+      <Alert
+        closeButton
+        isOpen={alertOpen}
+        message="Are you sure you want to Delete the question?"
+        onClose={() => {
+          setAlertOpen(false);
+          setDeleteQuestion(null);
+        }}
+        onSubmit={async () => {
+          await QuestionApi.kill(deleteQuestion);
+          setAlertOpen(false);
+          setDeleteQuestion(false);
+          fetchQuizDetails();
+        }}
+        title="Delete Question!"
+      />
     </div>
   );
 };
 
-export default ShowQuestions;
+export default ShowAll;
