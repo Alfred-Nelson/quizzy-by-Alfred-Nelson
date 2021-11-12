@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@bigbinary/neetoui/v2";
 
-const Quiz = ({
+const Question = ({
   array,
   textareaValue,
   setTextareaValue,
@@ -90,4 +90,4 @@ const Quiz = ({
   );
 };
 
-export default Quiz;
+export default Question;

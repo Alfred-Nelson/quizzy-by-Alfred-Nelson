@@ -32,6 +32,5 @@
 en:
   hello: "Hello world"
   create_success: "Successfully created the %{entity}"
-  quiz:
-    update_success: "Successfully updated Quiz name"
-    destroy_success: "Successfully destroyed Quiz"
+  update_success: "Successfully updated %{entity}"
+  destroy_success: "Successfully destroyed the %{entity}"

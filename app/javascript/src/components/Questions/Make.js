@@ -9,9 +9,9 @@ import { toast } from "react-toastify";
 import { QuestionApi } from "apis/question";
 import { QuizApi } from "apis/quiz";
 import PageHeader from "Common/utils/PageHeader";
-import Quiz from "Form/Quiz";
+import Question from "Form/Question";
 
-const MakeQuestion = () => {
+const Make = () => {
   const [quizName, setQuizName] = useState("");
   const [textareaValue, setTextareaValue] = useState("");
   const [optionsObject, setOptionsObject] = useState(["", ""]);
@@ -33,7 +33,7 @@ const MakeQuestion = () => {
     setOptionsObject([...data]);
   };
 
-  const handleRemove = (e, index) => {
+  const handleRemove = index => {
     const data = optionsObject;
     data.splice(index, 1);
     setOptionsObject([...data]);
@@ -67,6 +67,8 @@ const MakeQuestion = () => {
       toast.error("Options cannot be blank", TOASTR_OPTIONS);
     } else if (!correctAnswer) {
       toast.error("Select a Correct answer", TOASTR_OPTIONS);
+    } else if (textareaValue == "") {
+      toast.error("Question cannot be blank", TOASTR_OPTIONS);
     } else {
       const result = optionsObject.map((val, index) => {
         return { value: val, answer: correctAnswer.value == index };
@@ -85,7 +87,7 @@ const MakeQuestion = () => {
         heading={`${quizName} Quiz`}
         linkTo={`/quiz/${id}/add/question`}
       />
-      <Quiz
+      <Question
         array={Array(numberOfOptions).fill()}
         textareaValue={textareaValue}
         setTextareaValue={setTextareaValue}
@@ -102,4 +104,4 @@ const MakeQuestion = () => {
   );
 };
 
-export default MakeQuestion;
+export default Make;

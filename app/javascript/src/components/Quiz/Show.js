@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 
+import { Typography } from "@bigbinary/neetoui/v2";
 import { useParams } from "react-router";
 
 import { QuizApi } from "apis/quiz";
 import PageHeader from "Common/utils/PageHeader";
+import ShowAll from "components/Questions/ShowAll";
 
 const Show = () => {
   const [quizName, setQuizName] = useState("");
+  const [questionsArray, setQuestionsArray] = useState([]);
   const { id } = useParams();
 
   const fetchQuizDetails = async () => {
@@ -14,6 +17,7 @@ const Show = () => {
     const data = await response.data;
     const name = data.quiz.name[0].toUpperCase() + data.quiz.name.slice(1);
     setQuizName(name);
+    setQuestionsArray(data.quiz.questions);
   };
 
   useEffect(() => {
@@ -27,6 +31,16 @@ const Show = () => {
         buttonValue="Add questions"
         linkTo={`/quiz/${id}/add/question`}
       />
+      {questionsArray?.length > 0 ? (
+        <ShowAll
+          questionsArray={questionsArray}
+          fetchQuizDetails={fetchQuizDetails}
+        />
+      ) : (
+        <div className="mt-10 w-full h-64 flex justify-center items-center">
+          <Typography style="body1">🥷🏽 No Questions Added</Typography>
+        </div>
+      )}
     </>
   );
 };
