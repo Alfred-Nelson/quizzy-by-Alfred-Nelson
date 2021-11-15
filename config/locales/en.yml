@@ -34,3 +34,4 @@ en:
   create_success: "Successfully created the %{entity}"
   update_success: "Successfully updated %{entity}"
   destroy_success: "Successfully destroyed the %{entity}"
+  immutable: "is immutable"

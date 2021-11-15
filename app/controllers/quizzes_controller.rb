@@ -35,7 +35,18 @@ class QuizzesController < ApplicationController
     if @quiz.destroy
       render status: :ok, json: { notice: t("destroy_success", entity: "Quiz") }
     else
-      render status: :unprocessable_entity, json: { notice: @quiz.errors.full_messages }
+      render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
+    end
+  end
+
+  def get_slug
+    @quiz = Quiz.find_by(id: params[:id])
+    if @quiz.slug?
+      render status: :ok, json: { slug: @quiz.slug }
+    elsif @quiz.update(id: @quiz.id, slug: @quiz.set_slug)
+      render status: :ok, json: { slug: @quiz.slug }
+    else
+      render status: :unprocessable_entity, json: { error: @quiz.errors.full_messages }
     end
   end
 
