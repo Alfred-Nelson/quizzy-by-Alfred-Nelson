@@ -16,7 +16,7 @@ const PublishQuiz = ({ id, quizSlug, setQuizSlug }) => {
       {quizSlug && (
         <div>
           <Typography className="text-blue-400">
-            localhost:3000/public/{quizSlug}
+            {window.location.host}/public/{quizSlug}
           </Typography>
         </div>
       )}
