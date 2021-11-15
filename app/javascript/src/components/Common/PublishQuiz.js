@@ -1,14 +1,32 @@
 import React from "react";
 
-import { Button } from "@bigbinary/neetoui/v2";
+import { Button, Typography } from "@bigbinary/neetoui/v2";
 
-const PublishQuiz = () => {
-  const handleClick = () => {};
+import { QuizApi } from "apis/quiz";
+
+const PublishQuiz = ({ id, quizSlug, setQuizSlug }) => {
+  const handleClick = async () => {
+    const response = await QuizApi.publish(id);
+    const a = await response.data;
+    setQuizSlug(a.slug);
+  };
 
   return (
-    <div className="w-full mt-5">
-      <div className="w-full flex justify-end">
-        <Button label="Publish" size="large" onClick={handleClick} />
+    <div className="w-full mt-5 flex justify-between items-center">
+      {quizSlug && (
+        <div>
+          <Typography className="text-blue-400">
+            localhost:3000/public/{quizSlug}
+          </Typography>
+        </div>
+      )}
+      <div className={quizSlug ? null : "w-full flex justify-end"}>
+        <Button
+          label={quizSlug ? "Published" : "Publish"}
+          size="large"
+          onClick={handleClick}
+          disabled={quizSlug}
+        />
       </div>
     </div>
   );

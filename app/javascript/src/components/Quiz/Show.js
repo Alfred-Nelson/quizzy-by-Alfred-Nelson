@@ -10,6 +10,7 @@ import ShowAll from "components/Questions/ShowAll";
 
 const Show = () => {
   const [quizName, setQuizName] = useState("");
+  const [quizSlug, setQuizSlug] = useState(null);
   const [questionsArray, setQuestionsArray] = useState([]);
   const { id } = useParams();
 
@@ -18,6 +19,7 @@ const Show = () => {
     const data = await response.data;
     const name = data.quiz.name[0].toUpperCase() + data.quiz.name.slice(1);
     setQuizName(name);
+    setQuizSlug(data.quiz.slug);
     setQuestionsArray(data.quiz.questions);
   };
 
@@ -34,7 +36,7 @@ const Show = () => {
       />
       {questionsArray?.length > 0 ? (
         <>
-          <PublishQuiz />
+          <PublishQuiz id={id} quizSlug={quizSlug} setQuizSlug={setQuizSlug} />
           <ShowAll
             questionsArray={questionsArray}
             fetchQuizDetails={fetchQuizDetails}

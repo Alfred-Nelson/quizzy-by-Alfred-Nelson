@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :questions, except: %i[new edit]
   end
 
+  get "slug/:id", to: "quizzes#get_slug"
+
   root "home#index"
   get "*path", to: "home#index", via: :all
 end
