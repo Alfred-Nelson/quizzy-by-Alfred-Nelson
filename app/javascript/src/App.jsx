@@ -7,13 +7,9 @@ import { ToastContainer } from "react-toastify";
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import { initializeLogger } from "common/logger";
 import PrivateRoute from "components/Common/PrivateRoute";
+import PublicPage from "components/Common/PublicPage";
 import Container from "components/Container";
-import Dashboard from "components/Dashboard";
 import Login from "components/Login";
-import Edit from "components/Questions/Edit";
-import Make from "components/Questions/Make";
-import Create from "components/Quiz/Create";
-import Show from "components/Quiz/Show";
 import { getFromLocalStorage } from "helpers/storage";
 
 const App = () => {
@@ -34,21 +30,19 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Container isLoggedIn={isLoggedIn}>
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/quiz/create" component={Create} />
-          <Route exact path="/quiz/:id/show" component={Show} />
-          <Route exact path="/quiz/:id/add/question" component={Make} />
-          <Route exact path="/question/:id/edit" component={Edit} />
-          <PrivateRoute
-            path="/"
-            redirectRoute="/login"
-            condition={isLoggedIn}
-            component={Dashboard}
-          />
-        </Switch>
-      </Container>
+      <Switch>
+        <Route exact path="/public/:slug" component={PublicPage} />
+        <Container isLoggedIn={isLoggedIn}>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <PrivateRoute
+              path="/"
+              redirectRoute="/login"
+              condition={isLoggedIn}
+            />
+          </Switch>
+        </Container>
+      </Switch>
     </Router>
   );
 };
