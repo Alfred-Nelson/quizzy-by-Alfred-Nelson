@@ -35,3 +35,4 @@ en:
   update_success: "Successfully updated %{entity}"
   destroy_success: "Successfully destroyed the %{entity}"
   immutable: "is immutable"
+  not_found: "Quiz was not found"
