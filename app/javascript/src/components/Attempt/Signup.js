@@ -4,7 +4,13 @@ import { Button, Input, Typography } from "@bigbinary/neetoui/v2";
 
 import { UserApi } from "apis/user";
 
-const Signup = ({ quizName, setLoggedIn, quizId }) => {
+const Signup = ({
+  quizName,
+  setLoggedIn,
+  quizId,
+  setAttemptId,
+  setSubmitted,
+}) => {
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
   const [emailInput, setEmailInput] = useState("");
@@ -16,8 +22,10 @@ const Signup = ({ quizName, setLoggedIn, quizId }) => {
       email: emailInput,
       attempts_attributes: [{ quiz_id: quizId, submitted: false }],
     };
-    await UserApi.create(payload);
+    const response = await UserApi.create(payload);
     setLoggedIn(true);
+    setAttemptId(response.data.id);
+    setSubmitted(response.data.submitted);
   };
 
   return (

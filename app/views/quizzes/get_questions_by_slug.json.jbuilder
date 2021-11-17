@@ -1,9 +1,9 @@
 json.quiz do
   json.extract! @quiz, :id
   json.questions @quiz.questions do |question|
-    json.extract! question, :value
+    json.extract! question, :value, :id
     json.options question.options do |option|
-      json.extract! option, :value
+      json.extract! option, :value, :id
     end
   end
 end

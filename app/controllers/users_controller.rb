@@ -4,15 +4,35 @@ class UsersController < ApplicationController
   def create
     @user = User.find_by(email: user_params[:email])
     if @user
-      if @user.update(user_params)
-        render status: :ok, json: { notice: "YAAAAy" }
+      attempted_quiz = @user.attempts.find_by(quiz_id: user_params[:attempts_attributes][0][:quiz_id])
+      if attempted_quiz
+        render status: :ok, json:
+        {
+          notice: "Standard User succesfully logged in",
+          id: attempted_quiz.id,
+          submitted: attempted_quiz.submitted
+        }
+      elsif @user.update(user_params)
+        attempted_quiz = @user.attempts.find_by(quiz_id: user_params[:attempts_attributes][0][:quiz_id])
+        render status: :ok,
+          json: {
+            notice: "Standard User succesfully logged in",
+            id: attempted_quiz.id,
+            submitted: false
+          }
       else
         render status: :unprocessable_entity, json: { error: "NOOOOOOO" }
       end
     else
       @user = User.new(user_params.merge(password: "welcome", password_confirmation: "welcome"))
       if @user.save
-        render status: :ok, json: { notice: "yAAAy" }
+        attempted_quiz = @user.attempts.find_by(quiz_id: user_params[:attempts_attributes][0][:quiz_id])
+        render status: :ok, json:
+          {
+            notice: "Standard User succesfully logged in",
+            id: attempted_quiz.id,
+            submitted: false
+          }
       else
         render status: :unprocessable_entity, json: { notice: "nooooooo" }
       end

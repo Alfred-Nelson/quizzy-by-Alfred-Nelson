@@ -12,11 +12,16 @@ const Attempt = () => {
   const [quizName, setQuizName] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [quizId, setQuizId] = useState(null);
+  const [attemptId, setAttemptId] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
   const { slug } = useParams();
 
   const fetchDetails = async () => {
     const response = await QuizApi.getQuizBySlug(slug);
-    setQuizName(response.data.quiz.name);
+    setQuizName(
+      response.data.quiz.name[0].toUpperCase() +
+        response.data.quiz.name.slice(1).toLowerCase()
+    );
     setQuizId(response.data.quiz.id);
   };
 
@@ -31,10 +36,14 @@ const Attempt = () => {
           quizName={quizName}
           loggedIn={loggedIn}
           setLoggedIn={setLoggedIn}
+          setAttemptId={setAttemptId}
+          setSubmitted={setSubmitted}
           quizId={quizId}
         />
+      ) : !submitted ? (
+        <TakeQuiz slug={slug} attemptId={attemptId} quizName={quizName} />
       ) : (
-        <TakeQuiz slug={slug} />
+        <div>hello</div>
       )}
     </Container>
   );
