@@ -34,4 +34,7 @@ en:
   create_success: "Successfully created the %{entity}"
   update_success: "Successfully updated %{entity}"
   destroy_success: "Successfully destroyed the %{entity}"
+  submit_success: "Successfully submitted the quiz"
+  login_success: "Standard User succesfully logged in"
   immutable: "is immutable"
+  not_found: "Quiz was not found"

@@ -3,6 +3,8 @@
 class Quiz < ApplicationRecord
   belongs_to :user
   has_many :questions, dependent: :destroy
+  has_many :attempts, dependent: :destroy
+
   validates :name, presence: true
 
   def set_slug

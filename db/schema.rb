@@ -12,7 +12,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_14_160300) do
+ActiveRecord::Schema.define(version: 2021_11_17_193414) do
+
+  create_table "attempt_answers", force: :cascade do |t|
+    t.integer "attempt_id", null: false
+    t.integer "question_id", null: false
+    t.integer "correct_answer_id", null: false
+    t.integer "marked_answer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attempt_id", "question_id"], name: "index_attempt_answers_on_attempt_id_and_question_id", unique: true
+    t.index ["attempt_id"], name: "index_attempt_answers_on_attempt_id"
+    t.index ["correct_answer_id"], name: "index_attempt_answers_on_correct_answer_id"
+    t.index ["marked_answer_id"], name: "index_attempt_answers_on_marked_answer_id"
+    t.index ["question_id"], name: "index_attempt_answers_on_question_id"
+  end
+
+  create_table "attempts", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "quiz_id", null: false
+    t.boolean "submitted", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "no_of_correct_answers"
+    t.index ["quiz_id"], name: "index_attempts_on_quiz_id"
+    t.index ["user_id"], name: "index_attempts_on_user_id"
+  end
 
   create_table "options", force: :cascade do |t|
     t.text "value", null: false
@@ -53,6 +78,12 @@ ActiveRecord::Schema.define(version: 2021_11_14_160300) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "attempt_answers", "attempts"
+  add_foreign_key "attempt_answers", "options", column: "correct_answer_id"
+  add_foreign_key "attempt_answers", "options", column: "marked_answer_id"
+  add_foreign_key "attempt_answers", "questions"
+  add_foreign_key "attempts", "quizzes"
+  add_foreign_key "attempts", "users"
   add_foreign_key "options", "questions"
   add_foreign_key "questions", "quizzes", on_delete: :cascade
   add_foreign_key "quizzes", "users"

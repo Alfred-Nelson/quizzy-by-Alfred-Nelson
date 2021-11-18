@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import { initializeLogger } from "common/logger";
+import Attempt from "components/Attempt";
 import PrivateRoute from "components/Common/PrivateRoute";
 import PublicPage from "components/Common/PublicPage";
 import Container from "components/Container";
@@ -31,6 +32,7 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Switch>
+        <Route exact path="/public/:slug/attempt/new" component={Attempt} />
         <Route exact path="/public/:slug" component={PublicPage} />
         <Container isLoggedIn={isLoggedIn}>
           <Switch>

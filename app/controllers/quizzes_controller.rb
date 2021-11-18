@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class QuizzesController < ApplicationController
-  before_action :authenticate_user_using_x_auth_token
+  before_action :authenticate_user_using_x_auth_token, except: %i[get_quiz_by_slug get_questions_by_slug]
   before_action :load_quizzes, only: %i[destroy update show]
+  before_action :load_quizzes_by_slug, only: %i[get_quiz_by_slug get_questions_by_slug]
 
   def index
     @quizzes = @current_user.quizzes.order("updated_at DESC")
@@ -27,7 +28,7 @@ class QuizzesController < ApplicationController
 
   def show
     unless @quiz
-      render status: :not_found, json: { error: @quiz.errors.full_messages }
+      render status: :not_found, json: { error: t("not_found") }
     end
   end
 
@@ -50,6 +51,14 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def get_quiz_by_slug
+    render
+  end
+
+  def get_questions_by_slug
+    render
+  end
+
   private
 
     def quiz_params
@@ -58,5 +67,12 @@ class QuizzesController < ApplicationController
 
     def load_quizzes
       @quiz = @current_user.quizzes.find_by(id: params[:id])
+    end
+
+    def load_quizzes_by_slug
+      @quiz = Quiz.find_by(slug: params[:slug])
+      unless @quiz
+        render status: :not_found, json: { error: t("not_found") }
+      end
     end
 end
