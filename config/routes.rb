@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :quizzes, except: %i[new edit]
     resources :questions, except: %i[new edit]
     resources :users, only: %i[create]
-    resources :attempts, only: %i[update]
+    resources :attempts, only: %i[update show]
   end
 
   get "slug/:id", to: "quizzes#get_slug"

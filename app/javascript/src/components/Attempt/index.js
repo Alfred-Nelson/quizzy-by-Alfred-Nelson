@@ -6,6 +6,7 @@ import { QuizApi } from "apis/quiz";
 import Signup from "components/Attempt/Signup";
 import Container from "components/Container";
 
+import ShowQuiz from "./ShowQuiz";
 import TakeQuiz from "./TakeQuiz";
 
 const Attempt = () => {
@@ -27,6 +28,7 @@ const Attempt = () => {
 
   useEffect(() => {
     fetchDetails();
+    return () => {};
   }, []);
 
   return (
@@ -43,7 +45,7 @@ const Attempt = () => {
       ) : !submitted ? (
         <TakeQuiz slug={slug} attemptId={attemptId} quizName={quizName} />
       ) : (
-        <div>hello</div>
+        <ShowQuiz quizId={quizId} attemptId={attemptId} quizName={quizName} />
       )}
     </Container>
   );

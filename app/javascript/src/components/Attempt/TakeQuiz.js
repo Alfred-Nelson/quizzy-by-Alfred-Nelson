@@ -41,23 +41,35 @@ const TakeQuiz = ({ slug, attemptId, quizName }) => {
 
   useEffect(() => {
     fetchDetails();
+    return () => {};
   }, []);
 
   if (entered) {
     return (
-      <div>
-        <Typography> You Have Entered the Quiz </Typography>
-        <Button label=" You Have Entered the Quiz " onClick={handleRefresh} />
+      <div className="flex flex-col items-center justify-center">
+        <Typography className="mt-40 mb-10" style="h3">
+          You Have Entered the Quiz
+        </Typography>
+        <Button
+          label=" Go back to Login"
+          onClick={handleRefresh}
+          className=""
+        />
       </div>
     );
   }
 
   return (
     <div>
-      <Typography style="h3">{quizName} quiz</Typography>
+      <div className="mt-12 flex justify-center">
+        <Typography style="h3">{quizName} quiz</Typography>
+      </div>
       {questions.map((question, index) => (
-        <div key={index} className="mt-10">
-          <Radio label={question.value} className="space-y-4" stacked>
+        <div key={index} className="mt-16 ml-10 md:ml-40 flex">
+          <Typography style="body2" className="text-gray-500 mr-5">
+            Question {index + 1}:
+          </Typography>
+          <Radio label={question.value} className="space-y-4 mt-1" stacked>
             {question.options.map((option, optionIndex) => (
               <Radio.Item
                 key={optionIndex}
@@ -75,7 +87,9 @@ const TakeQuiz = ({ slug, attemptId, quizName }) => {
           </Radio>
         </div>
       ))}
-      <Button label="Submit" className="mt-12" onClick={handleSubmit} />
+      <div className="mt-12 flex justify-center">
+        <Button label="Submit" onClick={handleSubmit} />
+      </div>
     </div>
   );
 };

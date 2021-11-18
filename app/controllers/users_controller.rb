@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       if attempted_quiz
         render status: :ok, json:
         {
-          notice: "Standard User succesfully logged in",
+          notice: t("login_success"),
           id: attempted_quiz.id,
           submitted: attempted_quiz.submitted
         }
@@ -16,12 +16,12 @@ class UsersController < ApplicationController
         attempted_quiz = @user.attempts.find_by(quiz_id: user_params[:attempts_attributes][0][:quiz_id])
         render status: :ok,
           json: {
-            notice: "Standard User succesfully logged in",
+            notice: t("login_success"),
             id: attempted_quiz.id,
             submitted: false
           }
       else
-        render status: :unprocessable_entity, json: { error: "NOOOOOOO" }
+        render status: :unprocessable_entity, json: { error: @user.errors.full_messages }
       end
     else
       @user = User.new(user_params.merge(password: "welcome", password_confirmation: "welcome"))
@@ -29,12 +29,12 @@ class UsersController < ApplicationController
         attempted_quiz = @user.attempts.find_by(quiz_id: user_params[:attempts_attributes][0][:quiz_id])
         render status: :ok, json:
           {
-            notice: "Standard User succesfully logged in",
+            notice: t("login_success"),
             id: attempted_quiz.id,
             submitted: false
           }
       else
-        render status: :unprocessable_entity, json: { notice: "nooooooo" }
+        render status: :unprocessable_entity, json: { error: @user.errors.full_messages }
       end
     end
   end
