@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Button, Typography } from "@bigbinary/neetoui/v2";
+import { Link } from "react-router-dom";
 
 import { AuthApi } from "apis/auth";
 import { resetAuthTokens } from "apis/axios";
@@ -30,7 +31,9 @@ const NavItems = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <Typography className="mr-5"> Reports </Typography>
+      <Link to="/report">
+        <Typography className="mr-5"> Reports </Typography>
+      </Link>
       <Typography className="mr-5">{userName}</Typography>
       <Button label="Logout" onClick={handleClick} className="mr-5" />
     </div>
