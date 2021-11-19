@@ -79,10 +79,10 @@ const ShowAll = ({ questionsArray, fetchQuizDetails, attempts }) => {
                     {option.answer ? (
                       <CheckCircle size={16} className="mt-1" color="#00D100" />
                     ) : null}
-                    {attemptAnswer?.[0].marked_answer_id == option.id ? (
+                    {attemptAnswer?.[0]?.marked_answer_id == option.id ? (
                       <Typography
                         className={
-                          attemptAnswer?.[0].correct_answer_id == option.id
+                          attemptAnswer?.[0]?.correct_answer_id == option.id
                             ? correctStyle
                             : wrongStyle
                         }

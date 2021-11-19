@@ -18,7 +18,7 @@ const ShowQuiz = ({ quizId, attemptId, quizName }) => {
     setAttempts(
       res.data.attempt.attempted.sort((a, b) => a.question_id - b.question_id)
     );
-    setNoOfCorrect(res.data.attempt.no_of_correct_answers);
+    setNoOfCorrect(res.data.attempt.correct_answer_count);
   };
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const ShowQuiz = ({ quizId, attemptId, quizName }) => {
           unattempted answers: {questions?.length - attempts?.length}
         </Typography>
       </div>
-      {questions?.length > 0 && attempts?.length > 0 && (
+      {questions?.length > 0 && attempts?.length >= 0 && (
         <ShowAll questionsArray={questions} attempts={attempts} />
       )}
     </div>

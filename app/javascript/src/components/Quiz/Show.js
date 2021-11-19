@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { Plus } from "@bigbinary/neeto-icons";
 import { Typography } from "@bigbinary/neetoui/v2";
 import { useParams } from "react-router";
 
@@ -32,6 +33,7 @@ const Show = () => {
       <PageHeader
         heading={`${quizName} Quiz`}
         buttonValue="Add questions"
+        icon={Plus}
         linkTo={`/quiz/${id}/add/question`}
       />
       {questionsArray?.length > 0 ? (

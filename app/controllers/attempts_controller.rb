@@ -4,9 +4,11 @@ class AttemptsController < ApplicationController
   before_action :load_attempt
   def update
     attempted_answers_array, no_correct_answer = get_orginal_attempt_answer_array
+    total_question_count = @attempt.quiz.questions.count
     if @attempt.update(
       submitted: attempt_params[:submitted],
-      no_of_correct_answers: no_correct_answer,
+      correct_answer_count: no_correct_answer,
+      incorrect_answer_count: total_question_count - no_correct_answer,
       attempt_answers_attributes: attempted_answers_array
     )
       render status: :ok, json: { notice: t("submit_success") }
