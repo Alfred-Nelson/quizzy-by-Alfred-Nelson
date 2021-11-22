@@ -42,6 +42,7 @@ const Show = () => {
           <ShowAll
             questionsArray={questionsArray}
             fetchQuizDetails={fetchQuizDetails}
+            slug={quizSlug}
           />
         </>
       ) : (

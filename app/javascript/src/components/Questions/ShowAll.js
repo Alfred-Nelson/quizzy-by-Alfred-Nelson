@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 
 import { QuestionApi } from "apis/question";
 
-const ShowAll = ({ questionsArray, fetchQuizDetails, attempts }) => {
+const ShowAll = ({ questionsArray, fetchQuizDetails, attempts, slug }) => {
   const [editButtonId, setEditButtonId] = useState(null);
   const [alertOpen, setAlertOpen] = useState(false);
   const [deleteQuestion, setDeleteQuestion] = useState(false);
@@ -47,20 +47,24 @@ const ShowAll = ({ questionsArray, fetchQuizDetails, attempts }) => {
                 </div>
                 {!attempts && (
                   <div>
-                    <Button
-                      icon={Edit}
-                      className="mr-5"
-                      style="secondary"
-                      onClick={() => setEditButtonId(question.id)}
-                    />
-                    {/* // history.push(`/question/${e.target.id}/edit`) */}
-                    <Button
-                      icon={Delete}
-                      onClick={() => {
-                        setAlertOpen(true);
-                        setDeleteQuestion(question.id);
-                      }}
-                    />
+                    {!slug && (
+                      <>
+                        <Button
+                          icon={Edit}
+                          className="mr-5"
+                          style="secondary"
+                          onClick={() => setEditButtonId(question.id)}
+                        />
+                        {/* // history.push(`/question/${e.target.id}/edit`) */}
+                        <Button
+                          icon={Delete}
+                          onClick={() => {
+                            setAlertOpen(true);
+                            setDeleteQuestion(question.id);
+                          }}
+                        />
+                      </>
+                    )}
                   </div>
                 )}
               </div>
