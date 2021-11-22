@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Radio, Typography, Button } from "@bigbinary/neetoui/v2";
+import { Radio, Typography, Button, PageLoader } from "@bigbinary/neetoui/v2";
 
 import { AttemptApi } from "apis/attempt";
 import { QuizApi } from "apis/quiz";
@@ -9,10 +9,13 @@ const TakeQuiz = ({ slug, attemptId, quizName }) => {
   const [questions, setQuestions] = useState([]);
   const [selected, setSelected] = useState({});
   const [entered, setEntered] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchDetails = async () => {
+    setLoading(true);
     const response = await QuizApi.getQuizQuestionsBySlug(slug);
     setQuestions(response.data.quiz.questions);
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -61,35 +64,41 @@ const TakeQuiz = ({ slug, attemptId, quizName }) => {
 
   return (
     <div>
-      <div className="mt-12 flex justify-center">
-        <Typography style="h3">{quizName} quiz</Typography>
-      </div>
-      {questions.map((question, index) => (
-        <div key={index} className="mt-16 ml-10 md:ml-40 flex">
-          <Typography style="body2" className="text-gray-500 mr-5">
-            Question {index + 1}:
-          </Typography>
-          <Radio label={question.value} className="space-y-4 mt-1" stacked>
-            {question.options.map((option, optionIndex) => (
-              <Radio.Item
-                key={optionIndex}
-                label={option.value}
-                value={option.id}
-                onChange={e =>
-                  setSelected(prev => ({
-                    ...prev,
-                    [question.id]: e.target.value,
-                  }))
-                }
-                checked={option.id == selected[question.id]}
-              />
-            ))}
-          </Radio>
-        </div>
-      ))}
-      <div className="mt-12 flex justify-center">
-        <Button label="Submit" onClick={handleSubmit} />
-      </div>
+      {loading ? (
+        <PageLoader />
+      ) : (
+        <>
+          <div className="mt-12 flex justify-center">
+            <Typography style="h3">{quizName} quiz</Typography>
+          </div>
+          {questions.map((question, index) => (
+            <div key={index} className="mt-16 ml-10 md:ml-40 flex">
+              <Typography style="body2" className="text-gray-500 mr-5">
+                Question {index + 1}:
+              </Typography>
+              <Radio label={question.value} className="space-y-4 mt-1" stacked>
+                {question.options.map((option, optionIndex) => (
+                  <Radio.Item
+                    key={optionIndex}
+                    label={option.value}
+                    value={option.id}
+                    onChange={e =>
+                      setSelected(prev => ({
+                        ...prev,
+                        [question.id]: e.target.value,
+                      }))
+                    }
+                    checked={option.id == selected[question.id]}
+                  />
+                ))}
+              </Radio>
+            </div>
+          ))}
+          <div className="mt-12 flex justify-center">
+            <Button label="Submit" onClick={handleSubmit} />
+          </div>
+        </>
+      )}
     </div>
   );
 };
