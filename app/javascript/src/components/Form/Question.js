@@ -30,12 +30,13 @@ const Question = ({
         rows={3}
         className="mt-10"
         value={textareaValue}
+        required
         onChange={e => setTextareaValue(e.target.value)}
       />
       <div className="w-full flex flex-col items-center">
         {array.map((_, index) => (
           <div key={index} className="w-3/4 flex justify-around mt-10 ">
-            <span className="mt-2">{`option ${index + 1}`}</span>
+            <span className="mt-2">{`option ${index + 1}*`}</span>
             <div className="w-3/4 flex justify-between">
               <div className="w-11/12">
                 <Input
@@ -67,7 +68,7 @@ const Question = ({
           />
         )}
 
-        <Typography className="mt-10">Correct Answer</Typography>
+        <Typography className="mt-10">Correct Answer*</Typography>
 
         <Select
           className="w-1/2"
