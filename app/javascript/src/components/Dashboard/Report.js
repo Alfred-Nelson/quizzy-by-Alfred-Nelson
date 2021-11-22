@@ -16,11 +16,13 @@ const Report = () => {
   const [download, setDownload] = useState(false);
   const [userId, setUserId] = useState(null);
   const [time, setTime] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const token = getFromLocalStorage("authToken");
   const email = getFromLocalStorage("authEmail");
 
   const fetchDetails = async () => {
+    setLoading(true);
     const response = await QuizApi.list();
     const data = await response.data;
     let necessaryData = [];
@@ -38,6 +40,7 @@ const Report = () => {
       });
     });
     setAllReports(necessaryData);
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -66,76 +69,82 @@ const Report = () => {
 
   return (
     <>
-      {generating ? (
-        <div className="flex justify-center mt-56">
-          {download ? (
-            <div className="flex flex-col items-center">
-              <Typography style="h3">
-                Click download to download the file
-              </Typography>
-              <Button
-                label="Download"
-                size="large"
-                onClick={async () => {
-                  const resp = await axios.get("/download_report", {
-                    headers: {
-                      "X-Auth-Email": email,
-                      "X-Auth-Token": token,
-                    },
-                  });
-                  const temp = window.URL.createObjectURL(
-                    new Blob([resp.data])
-                  );
-                  const link = document.createElement("a");
-                  link.href = temp;
-                  link.setAttribute("download", `report_${userId}.csv`);
-                  document.body.appendChild(link);
-                  link.click();
-                }}
-                className="mt-5"
-                icon={Download}
-              />
+      {loading ? (
+        <PageLoader />
+      ) : (
+        <>
+          {generating ? (
+            <div className="flex justify-center mt-56">
+              {download ? (
+                <div className="flex flex-col items-center">
+                  <Typography style="h3">
+                    Click download to download the file
+                  </Typography>
+                  <Button
+                    label="Download"
+                    size="large"
+                    onClick={async () => {
+                      const resp = await axios.get("/download_report", {
+                        headers: {
+                          "X-Auth-Email": email,
+                          "X-Auth-Token": token,
+                        },
+                      });
+                      const temp = window.URL.createObjectURL(
+                        new Blob([resp.data])
+                      );
+                      const link = document.createElement("a");
+                      link.href = temp;
+                      link.setAttribute("download", `report_${userId}.csv`);
+                      document.body.appendChild(link);
+                      link.click();
+                    }}
+                    className="mt-5"
+                    icon={Download}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Typography style="h3">
+                    Waiting for generating file : {time}%{" "}
+                  </Typography>
+                  <div className="relative pt-1">
+                    <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-yellow-100">
+                      <div
+                        style={{ width: time + "%" }}
+                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-yellow-400"
+                      ></div>
+                    </div>
+                  </div>
+                  <PageLoader />
+                </div>
+              )}
             </div>
           ) : (
             <div>
-              <Typography style="h3">
-                Waiting for generating file : {time}%{" "}
-              </Typography>
-              <div className="relative pt-1">
-                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-yellow-100">
-                  <div
-                    style={{ width: time + "%" }}
-                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-yellow-400"
-                  ></div>
+              <PageHeader
+                heading="Report"
+                buttonValue="Download"
+                icon={Download}
+                handleSubmit={handleSubmit}
+              />
+              {allReports.length <= 0 ? (
+                <div className="flex h-64 md:mt-20 w-full justify-center items-center">
+                  <Typography style="body1">
+                    🐶 No one attempted your Quiz
+                  </Typography>
                 </div>
-              </div>
-              <PageLoader />
+              ) : (
+                <Table
+                  allQuizzes={allReports}
+                  fetchDetails={fetchDetails}
+                  column={REPORT_COLUMN}
+                  buttonShouldAppear={false}
+                />
+              )}
             </div>
           )}
-        </div>
-      ) : (
-        <div>
-          <PageHeader
-            heading="Report"
-            buttonValue="Download"
-            icon={Download}
-            handleSubmit={handleSubmit}
-          />
-          {allReports.length <= 0 ? (
-            <div className="flex h-64 md:mt-20 w-full justify-center items-center">
-              <Typography style="body1">
-                🐶 No one attempted your Quiz
-              </Typography>
-            </div>
-          ) : (
-            <Table
-              allQuizzes={allReports}
-              fetchDetails={fetchDetails}
-              column={REPORT_COLUMN}
-              buttonShouldAppear={false}
-            />
-          )}
-        </div>
+        </>
       )}
     </>
   );
