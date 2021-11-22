@@ -54,3 +54,7 @@ gem "bcrypt", "~> 3.1.13"
 
 # for react
 gem "react-rails"
+# for background processing
+gem "sidekiq"
+# for background processing status
+gem "sidekiq-status"

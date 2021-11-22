@@ -3,7 +3,13 @@ import React from "react";
 import { Button, Typography } from "@bigbinary/neetoui/v2";
 import { Link } from "react-router-dom";
 
-const PageHeader = ({ heading, buttonValue, linkTo, icon }) => {
+const PageHeader = ({
+  heading,
+  buttonValue,
+  linkTo,
+  icon,
+  handleSubmit = () => {},
+}) => {
   return (
     <div className="flex w-full justify-between">
       <Typography style="h3">{heading}</Typography>
@@ -14,6 +20,7 @@ const PageHeader = ({ heading, buttonValue, linkTo, icon }) => {
             label={buttonValue}
             icon={icon}
             iconPosition="left"
+            onClick={handleSubmit}
           />
         </Link>
       )}

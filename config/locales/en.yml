@@ -36,5 +36,11 @@ en:
   destroy_success: "Successfully destroyed the %{entity}"
   submit_success: "Successfully submitted the quiz"
   login_success: "Standard User succesfully logged in"
+  not_admin: "User is not admin"
   immutable: "is immutable"
   not_found: "Quiz was not found"
+  incorrect_credentials: "Incorrect credentials, try again."
+  authorization:
+    denied: "Authorization failed. User not authorized"
+  session:
+    could_not_auth: "Failed Session. User is unauthorized"

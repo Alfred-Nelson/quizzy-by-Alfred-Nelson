@@ -59,6 +59,21 @@ class QuizzesController < ApplicationController
     render
   end
 
+  def generate_report
+    id = GenerateReportWorker.perform_async(@current_user.id)
+    render status: :ok, json: { id: id, user_id: @current_user.id }
+  end
+
+  def report_status
+    status = Sidekiq::Status.get_all(params[:id])
+    render status: :ok, json: { status: status }
+  end
+
+  def download_report
+    id = @current_user.id
+    send_file Rails.root.join("tmp", "report_#{id}.csv"), type: "application/csv", filename: "report_#{id}.csv"
+  end
+
   private
 
     def quiz_params

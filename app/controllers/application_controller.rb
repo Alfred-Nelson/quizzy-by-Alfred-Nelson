@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
       ActiveSupport::SecurityUtils.secure_compare(
         user.authentication_token, auth_token
       )
-      @current_user = user
+      if user.role == "administrator"
+        @current_user = user
+      else
+        render status: :unauthorized, json: { error: t("not_admin") }
+      end
     else
       render status: :unauthorized, json: { error: t("session.could_not_auth") }
     end
