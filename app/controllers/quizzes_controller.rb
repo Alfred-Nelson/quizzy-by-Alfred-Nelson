@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class QuizzesController < ApplicationController
-  before_action :authenticate_user_using_x_auth_token, except: %i[get_quiz_by_slug get_questions_by_slug]
+  before_action :authenticate_user_using_x_auth_token, except: %i[get_quiz_by_slug get_questions_by_slug standard_show]
   before_action :load_quizzes, only: %i[destroy update show]
   before_action :load_quizzes_by_slug, only: %i[get_quiz_by_slug get_questions_by_slug]
 
@@ -57,6 +57,13 @@ class QuizzesController < ApplicationController
 
   def get_questions_by_slug
     render
+  end
+
+  def standard_show
+    @quiz = Quiz.find_by(id: params[:id])
+    unless @quiz
+      render status: :not_found, json: { error: t("not_found") }
+    end
   end
 
   def generate_report

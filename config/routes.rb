@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get "generate_report", to: "quizzes#generate_report"
   get "report_status/:id", to: "quizzes#report_status"
   get "download_report", to: "quizzes#download_report"
+  get "standard/quizzes/:id", to: "quizzes#standard_show"
 
   root "home#index"
   get "*path", to: "home#index", via: :all

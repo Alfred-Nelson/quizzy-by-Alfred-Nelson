@@ -14,7 +14,7 @@ const ShowQuiz = ({ quizId, attemptId, quizName }) => {
 
   const fetchDetails = async () => {
     setLoading(true);
-    const response = await QuizApi.show(quizId);
+    const response = await QuizApi.showStandard(quizId);
     const res = await AttemptApi.show(attemptId);
     setQuestions(response.data.quiz.questions.sort((a, b) => a.id - b.id));
     setAttempts(

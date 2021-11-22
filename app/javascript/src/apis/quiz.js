@@ -11,6 +11,7 @@ const getQuizQuestionsBySlug = slug =>
   axios.get(`slug/quizzes/${slug}/questions`);
 const generateReport = () => axios.get("/generate_report");
 const reportStatus = id => axios.get(`/report_status/${id}`);
+const showStandard = id => axios.get(`/standard/quizzes/${id}`);
 
 export const QuizApi = {
   create,
@@ -23,4 +24,5 @@ export const QuizApi = {
   getQuizQuestionsBySlug,
   generateReport,
   reportStatus,
+  showStandard,
 };
