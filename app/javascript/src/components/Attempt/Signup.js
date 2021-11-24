@@ -1,6 +1,9 @@
+import { TOASTR_OPTIONS } from "constants";
+
 import React, { useState } from "react";
 
 import { Button, Input, Typography } from "@bigbinary/neetoui/v2";
+import { toast } from "react-toastify";
 
 import { UserApi } from "apis/user";
 
@@ -16,16 +19,20 @@ const Signup = ({
   const [emailInput, setEmailInput] = useState("");
 
   const handleSubmit = async () => {
-    const payload = {
-      first_name: firstNameInput,
-      last_name: lastNameInput,
-      email: emailInput,
-      attempts_attributes: [{ quiz_id: quizId, submitted: false }],
-    };
-    const response = await UserApi.create(payload);
-    setLoggedIn(true);
-    setAttemptId(response.data.id);
-    setSubmitted(response.data.submitted);
+    if (emailInput) {
+      const payload = {
+        first_name: firstNameInput,
+        last_name: lastNameInput,
+        email: emailInput,
+        attempts_attributes: [{ quiz_id: quizId, submitted: false }],
+      };
+      const response = await UserApi.create(payload);
+      setLoggedIn(true);
+      setAttemptId(response.data.id);
+      setSubmitted(response.data.submitted);
+    } else {
+      toast.error("Email cannot be blank", TOASTR_OPTIONS);
+    }
   };
 
   return (
@@ -36,14 +43,12 @@ const Signup = ({
         </Typography>
         <Input
           label="First Name"
-          required={true}
           value={firstNameInput}
           onChange={e => setFirstNameInput(e.target.value)}
           className="mb-5 w-1/3"
         />
         <Input
           label="Lastname"
-          required={true}
           value={lastNameInput}
           onChange={e => setLastNameInput(e.target.value)}
           className="mb-5 w-1/3"

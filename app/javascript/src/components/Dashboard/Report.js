@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Download } from "@bigbinary/neeto-icons";
 import { Typography, Button, PageLoader } from "@bigbinary/neetoui/v2";
 import axios from "axios";
+import Logger from "js-logger";
 
 import { QuizApi } from "apis/quiz";
 import PageHeader from "Common/utils/PageHeader";
@@ -23,23 +24,27 @@ const Report = () => {
 
   const fetchDetails = async () => {
     setLoading(true);
-    const response = await QuizApi.list();
-    const data = await response.data;
-    let necessaryData = [];
-    data.quiz.forEach(quiz => {
-      quiz.report.forEach(attempt => {
-        if (attempt) {
-          necessaryData.push({
-            user_name: attempt.user_name,
-            email: attempt.email,
-            correct_answer_count: attempt.correct_answer_count,
-            incorrect_answer_count: attempt.incorrect_answer_count,
-            quiz_name: quiz.name,
-          });
-        }
+    try {
+      const response = await QuizApi.list();
+      const data = await response.data;
+      let necessaryData = [];
+      data.quiz.forEach(quiz => {
+        quiz.report.forEach(attempt => {
+          if (attempt) {
+            necessaryData.push({
+              user_name: attempt.user_name,
+              email: attempt.email,
+              correct_answer_count: attempt.correct_answer_count,
+              incorrect_answer_count: attempt.incorrect_answer_count,
+              quiz_name: quiz.name,
+            });
+          }
+        });
       });
-    });
-    setAllReports(necessaryData);
+      setAllReports(necessaryData);
+    } catch (error) {
+      Logger.error(error);
+    }
     setLoading(false);
   };
 

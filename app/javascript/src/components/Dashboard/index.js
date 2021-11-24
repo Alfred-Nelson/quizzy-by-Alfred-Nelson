@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Plus } from "@bigbinary/neeto-icons";
 import { Typography, PageLoader } from "@bigbinary/neetoui/v2";
+import Logger from "js-logger";
 
 import { QuizApi } from "apis/quiz";
 import PageHeader from "Common/utils/PageHeader";
@@ -14,9 +15,13 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchDetails = async () => {
-    const response = await QuizApi.list();
-    const data = await response.data;
-    setAllQuizzes(data.quiz);
+    try {
+      const response = await QuizApi.list();
+      const data = await response.data;
+      setAllQuizzes(data.quiz);
+    } catch (error) {
+      Logger.error(error);
+    }
     setLoading(false);
   };
 
