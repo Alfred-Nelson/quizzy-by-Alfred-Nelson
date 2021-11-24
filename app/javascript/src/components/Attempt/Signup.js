@@ -19,7 +19,13 @@ const Signup = ({
   const [emailInput, setEmailInput] = useState("");
 
   const handleSubmit = async () => {
-    if (emailInput) {
+    if (!emailInput) {
+      toast.error(" Email cannot be blank", TOASTR_OPTIONS);
+    } else if (!firstNameInput) {
+      toast.error(" FirstName cannot be blank", TOASTR_OPTIONS);
+    } else if (!lastNameInput) {
+      toast.error(" LastName cannot be blank", TOASTR_OPTIONS);
+    } else {
       const payload = {
         first_name: firstNameInput,
         last_name: lastNameInput,
@@ -30,8 +36,6 @@ const Signup = ({
       setLoggedIn(true);
       setAttemptId(response.data.id);
       setSubmitted(response.data.submitted);
-    } else {
-      toast.error("Email cannot be blank", TOASTR_OPTIONS);
     }
   };
 
@@ -45,12 +49,14 @@ const Signup = ({
           label="First Name"
           value={firstNameInput}
           onChange={e => setFirstNameInput(e.target.value)}
+          required
           className="mb-5 w-1/3"
         />
         <Input
           label="Lastname"
           value={lastNameInput}
           onChange={e => setLastNameInput(e.target.value)}
+          required
           className="mb-5 w-1/3"
         />
         <Input

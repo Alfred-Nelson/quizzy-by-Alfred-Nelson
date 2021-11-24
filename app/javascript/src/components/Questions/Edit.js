@@ -2,6 +2,8 @@ import { TOASTR_OPTIONS } from "constants";
 
 import React, { useEffect, useState } from "react";
 
+import { Typography, PageLoader } from "@bigbinary/neetoui/v2";
+import Logger from "js-logger";
 import { useParams, useHistory } from "react-router";
 import { toast } from "react-toastify";
 
@@ -18,28 +20,37 @@ const Edit = () => {
   const [answer, setAnswer] = useState({});
   const [mainOptions, setMainOptions] = useState([]);
   const [quizId, setQuizId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const { id } = useParams();
   const history = useHistory();
 
   const fetchAndSetDetails = async () => {
-    const response = await QuestionApi.show(id);
-    const data = await response.data.question;
-    const name = data.quiz[0].toUpperCase() + data.quiz.slice(1);
-    setQuizName(name);
-    setQuestionValue(data.value);
-    setQuizId(data.quiz_id);
-    let options = data.options.map(option => option.value);
-    setOptionArray([...options]);
-    setMainOptions([...data.options]);
-    setNumberOfOptions(options.length);
-    const ids = data.options.map(option => option.id);
-    setIdArray(ids);
-    const result = data.options.filter(option => option.answer);
-    const answerObject = {
-      label: `option ${data.options.indexOf(result[0]) + 1}`,
-      value: data.options.indexOf(result[0]),
-    };
-    setAnswer({ ...answerObject });
+    setLoading(true);
+    try {
+      const response = await QuestionApi.show(id);
+      const data = await response.data.question;
+      const name = data.quiz[0].toUpperCase() + data.quiz.slice(1);
+      setQuizName(name);
+      setQuestionValue(data.value);
+      setQuizId(data.quiz_id);
+      let options = data.options.map(option => option.value);
+      setOptionArray([...options]);
+      setMainOptions([...data.options]);
+      setNumberOfOptions(options.length);
+      const ids = data.options.map(option => option.id);
+      setIdArray(ids);
+      const result = data.options.filter(option => option.answer);
+      const answerObject = {
+        label: `option ${data.options.indexOf(result[0]) + 1}`,
+        value: data.options.indexOf(result[0]),
+      };
+      setAnswer({ ...answerObject });
+    } catch (error) {
+      Logger.error(error);
+      setShowForm(false);
+    }
+    setLoading(false);
   };
 
   const handleChange = (e, index) => {
@@ -110,21 +121,33 @@ const Edit = () => {
 
   return (
     <div>
-      <PageHeader heading={`${quizName} Quiz`} />
+      {loading ? (
+        <PageLoader />
+      ) : (
+        <>
+          {!showForm ? (
+            <Typography>🧞‍♂️ You are a fraud</Typography>
+          ) : (
+            <>
+              <PageHeader heading={`${quizName} Quiz`} />
 
-      <Question
-        array={Array(numberOfOptions).fill()}
-        textareaValue={questionValue}
-        setTextareaValue={setQuestionValue}
-        optionsObject={optionArray}
-        numberOfOptions={numberOfOptions}
-        setNumberOfOptions={setNumberOfOptions}
-        handleChange={handleChange}
-        handleRemove={handleRemove}
-        correctAnswer={answer}
-        setCorrectAnswer={setAnswer}
-        handleSubmit={handleSubmit}
-      />
+              <Question
+                array={Array(numberOfOptions).fill()}
+                textareaValue={questionValue}
+                setTextareaValue={setQuestionValue}
+                optionsObject={optionArray}
+                numberOfOptions={numberOfOptions}
+                setNumberOfOptions={setNumberOfOptions}
+                handleChange={handleChange}
+                handleRemove={handleRemove}
+                correctAnswer={answer}
+                setCorrectAnswer={setAnswer}
+                handleSubmit={handleSubmit}
+              />
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };
