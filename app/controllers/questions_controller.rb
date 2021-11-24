@@ -38,6 +38,9 @@ class QuestionsController < ApplicationController
 
     def load_question
       @question = Question.find_by(id: params[:id])
+      unless @question.quiz.user === @current_user
+        render status: :unprocessable_entity, json: { error: t("authorization.denied") }
+      end
     end
 
     def question_params

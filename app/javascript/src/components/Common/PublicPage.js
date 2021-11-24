@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Typography, PageLoader } from "@bigbinary/neetoui/v2";
+import Logger from "js-logger";
 import { Redirect, useParams } from "react-router";
 
 import { QuizApi } from "apis/quiz";
@@ -12,8 +13,12 @@ const PublicPage = () => {
 
   const fetchDetails = async () => {
     setLoading(true);
-    const response = await QuizApi.getQuizBySlug(slug);
-    setQuizName(response.data.name);
+    try {
+      const response = await QuizApi.getQuizBySlug(slug);
+      setQuizName(response.data.name);
+    } catch (error) {
+      Logger.error(error);
+    }
     setLoading(false);
   };
 
