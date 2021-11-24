@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Plus } from "@bigbinary/neeto-icons";
 import { Typography, PageLoader } from "@bigbinary/neetoui/v2";
+import Logger from "js-logger";
 import { useParams } from "react-router";
 
 import { QuizApi } from "apis/quiz";
@@ -18,12 +19,16 @@ const Show = () => {
 
   const fetchQuizDetails = async () => {
     setLoading(true);
-    const response = await QuizApi.show(id);
-    const data = await response.data;
-    const name = data.quiz.name[0].toUpperCase() + data.quiz.name.slice(1);
-    setQuizName(name);
-    setQuizSlug(data.quiz.slug);
-    setQuestionsArray(data.quiz.questions);
+    try {
+      const response = await QuizApi.show(id);
+      const data = await response.data;
+      const name = data.quiz.name[0].toUpperCase() + data.quiz.name.slice(1);
+      setQuizName(name);
+      setQuizSlug(data.quiz.slug);
+      setQuestionsArray(data.quiz.questions);
+    } catch (error) {
+      Logger.error(error);
+    }
     setLoading(false);
   };
 
@@ -39,7 +44,7 @@ const Show = () => {
         <>
           <PageHeader
             heading={`${quizName} Quiz`}
-            buttonValue="Add questions"
+            buttonValue={quizSlug ? undefined : "Add questions"}
             icon={Plus}
             linkTo={`/quiz/${id}/add/question`}
           />

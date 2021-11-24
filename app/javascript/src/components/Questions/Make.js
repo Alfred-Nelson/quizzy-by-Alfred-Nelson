@@ -2,6 +2,8 @@ import { TOASTR_OPTIONS } from "constants";
 
 import React, { useState, useEffect } from "react";
 
+import { PageLoader, Typography } from "@bigbinary/neetoui/v2";
+import Logger from "js-logger";
 import { useParams } from "react-router";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
@@ -17,14 +19,23 @@ const Make = () => {
   const [optionsObject, setOptionsObject] = useState(["", ""]);
   const [numberOfOptions, setNumberOfOptions] = useState(2);
   const [correctAnswer, setCorrectAnswer] = useState(null);
+  const [showForm, setShowForm] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const history = useHistory();
 
   const fetchQuizDetails = async () => {
-    const response = await QuizApi.show(id);
-    const data = await response.data;
-    const name = data.quiz.name[0].toUpperCase() + data.quiz.name.slice(1);
-    setQuizName(name);
+    setLoading(true);
+    try {
+      const response = await QuizApi.show(id);
+      const data = await response.data;
+      const name = data.quiz.name[0].toUpperCase() + data.quiz.name.slice(1);
+      setQuizName(name);
+    } catch (error) {
+      Logger.error(error);
+      setShowForm(false);
+    }
+    setLoading(false);
   };
 
   const handleChange = (e, index) => {
@@ -83,23 +94,35 @@ const Make = () => {
 
   return (
     <div>
-      <PageHeader
-        heading={`${quizName} Quiz`}
-        linkTo={`/quiz/${id}/add/question`}
-      />
-      <Question
-        array={Array(numberOfOptions).fill()}
-        textareaValue={textareaValue}
-        setTextareaValue={setTextareaValue}
-        optionsObject={optionsObject}
-        numberOfOptions={numberOfOptions}
-        setNumberOfOptions={setNumberOfOptions}
-        handleChange={handleChange}
-        handleRemove={handleRemove}
-        correctAnswer={correctAnswer}
-        setCorrectAnswer={setCorrectAnswer}
-        handleSubmit={handleSubmit}
-      />
+      {loading ? (
+        <PageLoader />
+      ) : (
+        <>
+          {!showForm ? (
+            <Typography>🧞‍♂️ You are a fraud</Typography>
+          ) : (
+            <>
+              <PageHeader
+                heading={`${quizName} Quiz`}
+                linkTo={`/quiz/${id}/add/question`}
+              />
+              <Question
+                array={Array(numberOfOptions).fill()}
+                textareaValue={textareaValue}
+                setTextareaValue={setTextareaValue}
+                optionsObject={optionsObject}
+                numberOfOptions={numberOfOptions}
+                setNumberOfOptions={setNumberOfOptions}
+                handleChange={handleChange}
+                handleRemove={handleRemove}
+                correctAnswer={correctAnswer}
+                setCorrectAnswer={setCorrectAnswer}
+                handleSubmit={handleSubmit}
+              />
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };
